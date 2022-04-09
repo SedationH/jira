@@ -1,4 +1,18 @@
-function SearchPanel({ param, setParam, users }) {
+export interface User {
+  id: string;
+  name: string;
+}
+
+interface SearchPanelProps {
+  users: User[];
+  param: {
+    name: string;
+    personId: string;
+  };
+  setParam: (param: SearchPanelProps["param"]) => void;
+}
+
+function SearchPanel({ param, setParam, users }: SearchPanelProps) {
   return (
     <div>
       <input
