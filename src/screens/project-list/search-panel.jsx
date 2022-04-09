@@ -14,7 +14,9 @@ function SearchPanel({ param, setParam, users }) {
       <select name="pets" id="pet-select">
         <option value="">负责人</option>
         {users.map((user) => (
-          <option value={user.id}>{user.name}</option>
+          <option key={user.id} value={user.id}>
+            {user.name}
+          </option>
         ))}
       </select>
     </div>

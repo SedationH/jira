@@ -11,7 +11,7 @@ function List({ list, users }) {
       </thead>
       <tbody>
         {list.map((project) => (
-          <tr>
+          <tr key={project.id}>
             <td>{project.name}</td>
             <td>
               {users.find((user) => user.id === project.id)?.name || "无"}
