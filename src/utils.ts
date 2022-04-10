@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const isFalsy = (value: any) => (value === 0 ? false : !value);
+const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
 // 改变传入对象是不好的
 export const cleanObject = (object: object) => {
@@ -18,12 +18,12 @@ export const cleanObject = (object: object) => {
 
 export const useMount = (cb: () => void) => {
   useEffect(() => {
-    cb?.();
+    cb();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 
-export const useDebounce = (value: any, delay = 500) => {
+export const useDebounce = <T>(value: T, delay = 500) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
