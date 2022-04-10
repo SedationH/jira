@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import List from "./list";
 import SearchPanel from "./search-panel";
 import qs from "qs";
-import { apiURL, cleanObject, useDebounce, useMount } from "../../utils";
+import { apiURL, cleanObject, useDebounce, useMount } from "src/utils";
+import List from "./list";
 
-function ProjectList() {
+function ProjectListScreen() {
   const [param, setParam] = useState({
     name: "",
     personId: "",
@@ -39,4 +39,4 @@ function ProjectList() {
   );
 }
 
-export default ProjectList;
+export default ProjectListScreen;
