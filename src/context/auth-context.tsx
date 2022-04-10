@@ -3,16 +3,25 @@ import React, { useState, useContext, createContext, ReactNode } from "react";
 import * as auth from "src/auth-provider";
 import { AuthForm } from "src/auth-provider";
 import { User } from "src/screens/project-list/search-panel";
+import { useMount } from "src/utils";
+import { request } from "src/utils/request";
 
-const AuthContext = createContext<
-  | {
-      user: User | null;
-      login: (form: AuthForm) => Promise<void>;
-      register: (form: AuthForm) => Promise<void>;
-      logout: () => Promise<void>;
-    }
-  | undefined
->(undefined);
+const bootstarpUser = async () => {
+  let user = null;
+  const token = auth.getToken();
+  if (token) {
+    const data = await request("me", { token });
+    user = data.user;
+  }
+  return user;
+};
+
+const AuthContext = createContext<{
+  user: User | null;
+  login: (form: AuthForm) => Promise<void>;
+  register: (form: AuthForm) => Promise<void>;
+  logout: () => Promise<void>;
+} | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -20,6 +29,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (form: AuthForm) => auth.login(form).then(setUser);
   const register = (form: AuthForm) => auth.register(form).then(setUser);
   const logout = () => auth.logout().then(() => setUser(null));
+
+  useMount(async () => {
+    const user = await bootstarpUser();
+    setUser(user);
+  });
 
   return (
     <AuthContext.Provider

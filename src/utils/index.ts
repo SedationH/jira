@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-export const apiURL = process.env.REACT_APP_API_URL;
 
 const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
