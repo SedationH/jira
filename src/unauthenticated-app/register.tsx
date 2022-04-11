@@ -1,33 +1,32 @@
-import React, { FormEvent } from "react";
+import React from "react";
+import { Button, Form, Input } from "antd";
+import { AuthForm } from "src/auth-provider";
 import { useAuth } from "src/context/auth-context";
 
-function RegisterScreen() {
-  const { register, user } = useAuth();
-
-  const handleLoginSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const username = (e.currentTarget.elements[0] as HTMLInputElement).value;
-    const password = (e.currentTarget.elements[1] as HTMLInputElement).value;
-    register({ username, password });
+const RegisterScreen = () => {
+  const { register } = useAuth();
+  const handleSubmit = (values: AuthForm) => {
+    register(values);
   };
-
   return (
-    <form onSubmit={handleLoginSubmit}>
-      <div>
-        <label>
-          用户名
-          <input type="text" />
-        </label>
-      </div>
-      <div>
-        <label>
-          密码
-          <input type="text" />
-        </label>
-      </div>
-      <button type="submit">注册</button>
-    </form>
+    <Form onFinish={handleSubmit}>
+      <Form.Item
+        name="username"
+        rules={[{ required: true, message: "请输入用户名" }]}
+      >
+        <Input placeholder="用户名" />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        rules={[{ required: true, message: "请输入密码" }]}
+      >
+        <Input placeholder="密码" type="password" />
+      </Form.Item>
+      <Button block type="primary" htmlType="submit">
+        注册
+      </Button>
+    </Form>
   );
-}
+};
 
 export default RegisterScreen;
