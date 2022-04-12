@@ -1,0 +1,10 @@
+/* https://stackoverflow.com/questions/28988445/css-62-5-why-do-developers-use-it */
+html {
+  /* font-size: 62.5%; */
+  /* it is ok :) */
+  font-size: 10px;
+}
+
+html body #root .App {
+  min-width: 100vh;
+}

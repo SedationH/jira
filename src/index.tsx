@@ -3,7 +3,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { AppProviders } from "src/context";
 import App from "./App";
+
 import "antd/dist/antd.less";
+import "./App.css";
 
 loadDevTools(() => {
   ReactDOM.render(

@@ -29,7 +29,7 @@ function List({ list, users }: ListProps) {
         },
         {
           title: "负责人",
-          render: (value, project) => {
+          render: (_, project) => {
             return (
               <span>
                 {users.find((user) => user.id === project.personId)?.name}
