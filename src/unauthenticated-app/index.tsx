@@ -14,13 +14,13 @@ function UnauthenticatedApp() {
     <Container>
       <Background />
       <Header />
-      <ShadowCard>
+      <ShadowedCard>
         <Title>{isLogin ? "请登录" : "请注册"}</Title>
         {isLogin ? <LoginScreen /> : <RegisterScreen />}
         <ButtonWithMargin block onClick={() => setIsLogin(!isLogin)}>
           切换
         </ButtonWithMargin>
-      </ShadowCard>
+      </ShadowedCard>
     </Container>
   );
 }
@@ -32,9 +32,9 @@ const Container = styled.div`
   min-height: 100vh;
 `;
 
-const ShadowCard = styled(Card)`
+const ShadowedCard = styled(Card)`
   width: 40rem;
-  min-height: 56rem;
+  min-height: 50rem;
   padding: 3.2rem 4rem;
   border-radius: 0.3rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0 0 10px;
