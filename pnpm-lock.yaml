@@ -13,6 +13,7 @@ specifiers:
   '@types/react-dom': ^16.0.15
   antd: ^4.19.5
   craco-less: ^2.0.0
+  dayjs: ^1.11.0
   eslint-config-prettier: ^8.5.0
   husky: ^7.0.4
   jira-dev-tool: ^1.7.61
@@ -37,6 +38,7 @@ dependencies:
   '@types/react': 16.14.24
   '@types/react-dom': 16.9.14
   antd: 4.19.5_react-dom@16.14.0+react@16.14.0
+  dayjs: 1.11.0
   jira-dev-tool: 1.7.61_react-dom@16.14.0+react@16.14.0
   qs: 6.10.3
   react: 16.14.0

@@ -13,6 +13,7 @@
     "@types/react": "^16.0.44",
     "@types/react-dom": "^16.0.15",
     "antd": "^4.19.5",
+    "dayjs": "^1.11.0",
     "jira-dev-tool": "^1.7.61",
     "qs": "^6.10.3",
     "react": "^16.0.0",

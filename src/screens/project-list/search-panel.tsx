@@ -1,3 +1,7 @@
+import styled from "@emotion/styled";
+import { Form, Input } from "antd";
+import { Row } from "src/components/lib";
+
 export interface User {
   id: string;
   name: string;
@@ -15,26 +19,31 @@ interface SearchPanelProps {
 
 function SearchPanel({ param, setParam, users }: SearchPanelProps) {
   return (
-    <div>
-      <input
-        type="text"
-        value={param.name}
-        onChange={(evt) => {
-          setParam({
-            ...param,
-            name: evt.target.value,
-          });
-        }}
-      />
-      <select name="pets" id="pet-select">
-        <option value="">负责人</option>
-        {users.map((user) => (
-          <option key={user.id} value={user.id}>
-            {user.name}
-          </option>
-        ))}
-      </select>
-    </div>
+    <>
+      <h1>项目列表</h1>
+
+      <Row marginBottom gap>
+        <Input
+          placeholder={"项目名"}
+          style={{ width: "20rem" }}
+          value={param.name}
+          onChange={(evt) => {
+            setParam({
+              ...param,
+              name: evt.target.value,
+            });
+          }}
+        />
+        <select name="pets" id="pet-select">
+          <option value="">负责人</option>
+          {users.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.name}
+            </option>
+          ))}
+        </select>
+      </Row>
+    </>
   );
 }
 
