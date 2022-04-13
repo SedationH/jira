@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 
-const isFalsy = (value: unknown) => (value === 0 ? false : !value);
+// const isFalsy = (value: unknown) => (value === 0 ? false : !value);
+const isMeaningless = (value: unknown) =>
+  value === undefined || value === null || value === "";
+// function 也是 object
+// {...()=>{}} 是无意义的
 
 // 改变传入对象是不好的
-export const cleanObject = (object: object) => {
+export const cleanObject = (object: { [key: string]: unknown }) => {
   const result = { ...object };
   Object.keys(result).forEach((key) => {
-    // @ts-ignore
     const val = result[key];
-    if (isFalsy(val)) {
-      // @ts-ignore
+    if (isMeaningless(val)) {
       delete result[key];
     }
   });
