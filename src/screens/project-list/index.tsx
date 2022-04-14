@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import SearchPanel from "./search-panel";
-import { cleanObject, useDebounce, useMount } from "src/utils";
+import { cleanObject, useDebounce } from "src/utils";
 import { useRequest } from "src/utils/request";
 import List from "./list";
 import styled from "@emotion/styled";
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
+import { useAsync, useAsyncRetry } from "react-use";
+import { Row } from "src/components/lib";
 
 function ProjectListScreen() {
   const client = useRequest();
@@ -14,39 +16,51 @@ function ProjectListScreen() {
     personId: "",
   });
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<null | Error>(null);
-
   const debouncedParam = useDebounce(param, 500);
-  const [list, setList] = useState([]); // projects
-  useEffect(() => {
-    setLoading(true);
-    client("projects", { data: cleanObject(debouncedParam) })
-      .then(setList)
-      .catch((error) => {
-        setError(error);
-        setList([]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [debouncedParam]);
+  const {
+    value: list,
+    loading: listLoading,
+    error: listError,
+    retry: listRetry,
+  } = useAsyncRetry(
+    () => client("projects", { data: cleanObject(debouncedParam) }).catch(),
+    [debouncedParam]
+  );
 
-  const [users, setUsers] = useState([]);
-  useMount(() => {
-    setLoading(true);
-    client("users")
-      .then(setUsers)
-      .finally(() => {
-        setLoading(false);
-      });
-  });
+  const {
+    value: users,
+    loading: userLoading,
+    error: usersError,
+    retry: usersRetry,
+  } = useAsyncRetry(() => client("users"));
 
   return (
     <ScreenContainer>
-      <SearchPanel param={param} setParam={setParam} users={users} />
-      {<Typography.Text type="danger">{error?.message}</Typography.Text>}
-      <List loading={loading} dataSource={list} users={users} />
+      <SearchPanel param={param} setParam={setParam} users={users || []} />
+      <Row gap marginBottom style={{ justifyContent: "center" }}>
+        <Typography.Text type="danger">{listError?.message}</Typography.Text>
+        <Typography.Text type="danger">{usersError?.message}</Typography.Text>
+        {listError || usersError ? (
+          <Button
+            type="primary"
+            onClick={() => {
+              if (listError) {
+                listRetry();
+              }
+              if (usersError) {
+                usersRetry();
+              }
+            }}
+          >
+            Retry
+          </Button>
+        ) : null}
+      </Row>
+      <List
+        loading={listLoading || userLoading}
+        dataSource={listError || usersError ? [] : list}
+        users={users || []}
+      />
     </ScreenContainer>
   );
 }
@@ -56,6 +70,10 @@ export const ScreenContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+`;
+
+const ErrorWrapper = styled.div`
+  display: flex;
 `;
 
 export default ProjectListScreen;
