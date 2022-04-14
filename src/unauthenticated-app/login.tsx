@@ -1,13 +1,15 @@
 import { Button, Form, Input } from "antd";
 import React, { FormEvent } from "react";
+import { useAsync, useAsyncFn } from "react-use";
 import { AuthForm } from "src/auth-provider";
 import { useAuth } from "src/context/auth-context";
 
 function LoginScreen() {
   const { login } = useAuth();
+  const [{ loading }, doLogin] = useAsyncFn((values) => login(values));
 
   const handleLoginSubmit = (values: AuthForm) => {
-    login(values);
+    doLogin(values);
   };
 
   return (
@@ -24,7 +26,7 @@ function LoginScreen() {
       >
         <Input placeholder="密码" type="password" />
       </Form.Item>
-      <Button block type="primary" htmlType="submit">
+      <Button loading={loading} block type="primary" htmlType="submit">
         登陆
       </Button>
     </Form>

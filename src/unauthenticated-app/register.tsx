@@ -3,9 +3,12 @@ import { Button, Form, Input } from "antd";
 import { AuthForm } from "src/auth-provider";
 import { useAuth } from "src/context/auth-context";
 import { ValidateStatus } from "antd/lib/form/FormItem";
+import { useAsyncFn } from "react-use";
 
 const RegisterScreen = () => {
   const { register } = useAuth();
+
+  const [{ loading }, doRegister] = useAsyncFn((values) => register(values));
   const handleSubmit = ({
     cpassword,
     ...values
@@ -23,7 +26,7 @@ const RegisterScreen = () => {
       });
     }
 
-    register(values);
+    doRegister(values);
   };
 
   const [cpassword, setCpassword] = useState<{
@@ -53,7 +56,7 @@ const RegisterScreen = () => {
       >
         <Input placeholder="确认密码" type="password" />
       </Form.Item>
-      <Button block type="primary" htmlType="submit">
+      <Button block loading={loading} type="primary" htmlType="submit">
         注册
       </Button>
     </Form>
