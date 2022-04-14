@@ -4,12 +4,17 @@ import { useAuth } from "src/context/auth-context";
 import ProjectListScreen from "src/screens/project-list";
 import { ReactComponent as SoftwareLogo } from "src/assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const AuthenticatedApp = () => {
   return (
     <Container>
       <PageHeader />
-      <ProjectListScreen />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/projects" element={<ProjectListScreen />}></Route>
+        </Routes>
+      </BrowserRouter>
     </Container>
   );
 };
