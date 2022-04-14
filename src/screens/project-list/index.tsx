@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SearchPanel from "./search-panel";
-import { cleanObject, useDebounce } from "src/utils";
+import { cleanObject, useDebounce, useTitle } from "src/utils";
 import { useRequest } from "src/utils/request";
 import List from "./list";
 import styled from "@emotion/styled";
@@ -10,6 +10,7 @@ import { Row } from "src/components/lib";
 
 function ProjectListScreen() {
   const client = useRequest();
+  useTitle("项目列表", false);
 
   const [param, setParam] = useState({
     name: "",
