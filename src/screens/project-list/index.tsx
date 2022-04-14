@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SearchPanel from "./search-panel";
 import { cleanObject, useDebounce } from "src/utils";
 import { useRequest } from "src/utils/request";
 import List from "./list";
 import styled from "@emotion/styled";
 import { Button, Typography } from "antd";
-import { useAsync, useAsyncRetry } from "react-use";
+import { useAsyncRetry } from "react-use";
 import { Row } from "src/components/lib";
 
 function ProjectListScreen() {

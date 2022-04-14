@@ -15,7 +15,6 @@ const AuthenticatedApp = () => {
 };
 
 const PageHeader = () => {
-  const { logout } = useAuth();
   return (
     <Header>
       <HeaderLeft gap={true}>
