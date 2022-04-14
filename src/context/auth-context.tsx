@@ -1,7 +1,9 @@
 import React, { useState, useContext, createContext, ReactNode } from "react";
+import { useAsyncFn } from "react-use";
 
 import * as auth from "src/auth-provider";
 import { AuthForm } from "src/auth-provider";
+import { FullPageLoading } from "src/components/lib";
 import { User } from "src/screens/project-list/search-panel";
 import { useMount } from "src/utils";
 import { request } from "src/utils/request";
@@ -29,11 +31,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (form: AuthForm) => auth.login(form).then(setUser);
   const register = (form: AuthForm) => auth.register(form).then(setUser);
   const logout = () => auth.logout().then(() => setUser(null));
+  const [{ loading }, doBootstrarpUser] = useAsyncFn(bootstarpUser);
 
   useMount(async () => {
-    const user = await bootstarpUser();
+    const user = await doBootstrarpUser();
     setUser(user);
   });
+
+  if (loading) {
+    return <FullPageLoading />;
+  }
 
   return (
     <AuthContext.Provider

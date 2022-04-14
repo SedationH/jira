@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Spin } from "antd";
 
 // 垂直居中，按行排布子元素
 export const Row = styled.div<{
@@ -25,3 +26,17 @@ export const Row = styled.div<{
         : undefined};
   }
 `;
+
+const FullPage = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+//页面loading
+export const FullPageLoading = () => (
+  <FullPage>
+    <Spin size={"large"} />
+  </FullPage>
+);
