@@ -72,8 +72,4 @@ export const ScreenContainer = styled.div`
   flex-direction: column;
 `;
 
-const ErrorWrapper = styled.div`
-  display: flex;
-`;
-
 export default ProjectListScreen;

@@ -1,6 +1,6 @@
 import { Button, Form, Input } from "antd";
-import React, { FormEvent } from "react";
-import { useAsync, useAsyncFn } from "react-use";
+import React from "react";
+import { useAsyncFn } from "react-use";
 import { AuthForm } from "src/auth-provider";
 import { useAuth } from "src/context/auth-context";
 
