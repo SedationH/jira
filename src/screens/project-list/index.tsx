@@ -4,6 +4,7 @@ import { cleanObject, useDebounce, useMount } from "src/utils";
 import { useRequest } from "src/utils/request";
 import List from "./list";
 import styled from "@emotion/styled";
+import { Typography } from "antd";
 
 function ProjectListScreen() {
   const client = useRequest();
@@ -13,21 +14,39 @@ function ProjectListScreen() {
     personId: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<null | Error>(null);
+
   const debouncedParam = useDebounce(param, 500);
   const [list, setList] = useState([]); // projects
   useEffect(() => {
-    client("projects", { data: cleanObject(debouncedParam) }).then(setList);
+    setLoading(true);
+    client("projects", { data: cleanObject(debouncedParam) })
+      .then(setList)
+      .catch((error) => {
+        setError(error);
+        setList([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [debouncedParam]);
 
   const [users, setUsers] = useState([]);
   useMount(() => {
-    client("users").then(setUsers);
+    setLoading(true);
+    client("users")
+      .then(setUsers)
+      .finally(() => {
+        setLoading(false);
+      });
   });
 
   return (
     <ScreenContainer>
       <SearchPanel param={param} setParam={setParam} users={users} />
-      <List list={list} users={users} />
+      {<Typography.Text type="danger">{error?.message}</Typography.Text>}
+      <List loading={loading} dataSource={list} users={users} />
     </ScreenContainer>
   );
 }
