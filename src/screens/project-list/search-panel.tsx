@@ -1,4 +1,4 @@
-import { Input } from "antd";
+import { Input, Select } from "antd";
 import { Row } from "src/components/lib";
 
 export interface User {
@@ -33,14 +33,22 @@ function SearchPanel({ param, setParam, users }: SearchPanelProps) {
             });
           }}
         />
-        <select name="pets" id="pet-select">
-          <option value="">负责人</option>
+        <Select
+          onChange={(personId) => {
+            setParam({
+              ...param,
+              personId,
+            });
+          }}
+          defaultValue=""
+        >
+          <Select.Option value="">负责人</Select.Option>
           {users.map((user) => (
-            <option key={user.id} value={user.id}>
+            <Select.Option key={user.id} value={user.id}>
               {user.name}
-            </option>
+            </Select.Option>
           ))}
-        </select>
+        </Select>
       </Row>
     </>
   );
