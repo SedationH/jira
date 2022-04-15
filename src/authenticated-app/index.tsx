@@ -20,9 +20,9 @@ const AuthenticatedApp = () => {
       <PageHeader />
       <BrowserRouter>
         <Routes>
+          <Route index element={<Navigate replace to="/projects" />} />
           <Route path="/projects" element={<ProjectListScreen />} />
           <Route path="/projects/:projectId/*" element={<ProjectScreen />} />
-          <Route path="*" element={<Navigate replace to="/projects" />} />
         </Routes>
       </BrowserRouter>
     </Container>
@@ -34,9 +34,7 @@ const PageHeader = () => {
     <Header>
       <HeaderLeft gap={true}>
         <Button
-          onClick={() => {
-            console.log(1);
-          }}
+          onClick={() => (window.location.href = window.location.origin)}
           type="link"
         >
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />

@@ -12,13 +12,13 @@ export const ProjectScreen = () => {
         <Link to={"epic"}>任务组</Link>
       </Row>
       <Routes>
+        <Route index element={<KanbanScreen />} />
         {/*projects/:projectId/kanban*/}
-        <Route path={"/kanban"} element={<KanbanScreen />} />
+        <Route path={"kanban"} element={<KanbanScreen />} />
         {/*projects/:projectId/epic*/}
-        <Route path={"/epic"} element={<EpicScreen />} />
+        <Route path={"epic"} element={<EpicScreen />} />
       </Routes>
     </>
   );
 };
-
 export default ProjectScreen;
