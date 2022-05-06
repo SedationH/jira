@@ -34,7 +34,12 @@ function ProjectListScreen() {
 
   return (
     <ScreenContainer>
-      <SearchPanel param={param} setParam={setParam} users={users || []} />
+      <SearchPanel
+        // TODO：any 去掉 需要从 client 上改
+        param={param as any}
+        setParam={setParam}
+        users={users || []}
+      />
       <Row gap marginBottom style={{ justifyContent: "center" }}>
         <Typography.Text type="danger">{listError?.message}</Typography.Text>
         <Typography.Text type="danger">{usersError?.message}</Typography.Text>

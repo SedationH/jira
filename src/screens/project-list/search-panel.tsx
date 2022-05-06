@@ -1,8 +1,10 @@
 import { Input, Select } from "antd";
+import IdSelect from "src/components/id-select";
 import { Row } from "src/components/lib";
+import { Optional } from "src/types";
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   token: string;
 }
@@ -11,9 +13,9 @@ interface SearchPanelProps {
   users: User[];
   param: {
     name: string;
-    personId: string;
+    personId: number;
   };
-  setParam: (param: SearchPanelProps["param"]) => void;
+  setParam: (param: Optional<SearchPanelProps["param"], "personId">) => void;
 }
 
 function SearchPanel({ param, setParam, users }: SearchPanelProps) {
@@ -26,29 +28,22 @@ function SearchPanel({ param, setParam, users }: SearchPanelProps) {
           placeholder={"项目名"}
           style={{ width: "20rem" }}
           value={param.name}
-          onChange={(evt) => {
+          onChange={(evt) =>
             setParam({
               ...param,
               name: evt.target.value,
-            });
-          }}
+            })
+          }
         />
-        <Select
-          onChange={(personId) => {
+        <IdSelect
+          options={users.map(({ name, id }) => ({ label: name, id }))}
+          onChange={(personId) =>
             setParam({
               ...param,
               personId,
-            });
-          }}
-          defaultValue=""
-        >
-          <Select.Option value="">负责人</Select.Option>
-          {users.map((user) => (
-            <Select.Option key={user.id} value={user.id}>
-              {user.name}
-            </Select.Option>
-          ))}
-        </Select>
+            })
+          }
+        />
       </Row>
     </>
   );
