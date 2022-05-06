@@ -29,10 +29,11 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
 export const useSetUrlSearchParam = () => {
   const [searchParams, setSearchParam] = useSearchParams();
   return (params: { [key in string]: unknown }) => {
-    const o = cleanObject({
-      ...Object.fromEntries(searchParams), //fromEntries,将数组里的键值对转换为对象,比如[['name','jack'],['id','1']]转换为{name:'jack',id:'1'}
-      ...params,
-    }) as URLSearchParamsInit;
-    return setSearchParam(o); //将参数添加到url里
+    return setSearchParam(
+      cleanObject({
+        ...Object.fromEntries(searchParams), //fromEntries,将数组里的键值对转换为对象,比如[['name','jack'],['id','1']]转换为{name:'jack',id:'1'}
+        ...params,
+      }) as URLSearchParamsInit
+    ); //将参数添加到url里
   };
 };
