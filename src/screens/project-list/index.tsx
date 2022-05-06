@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import SearchPanel from "./search-panel";
 import { cleanObject, useDebounce, useTitle } from "src/utils";
 import { useRequest } from "src/utils/request";
@@ -7,15 +7,12 @@ import styled from "@emotion/styled";
 import { Button, Typography } from "antd";
 import { useAsyncRetry } from "react-use";
 import { Row } from "src/components/lib";
+import { useUrlQueryParam } from "src/utils/url";
 
 function ProjectListScreen() {
   const client = useRequest();
   useTitle("项目列表", false);
-
-  const [param, setParam] = useState({
-    name: "",
-    personId: "",
-  });
+  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
 
   const debouncedParam = useDebounce(param, 500);
   const {
@@ -24,7 +21,7 @@ function ProjectListScreen() {
     error: listError,
     retry: listRetry,
   } = useAsyncRetry(
-    () => client("projects", { data: cleanObject(debouncedParam) }).catch(),
+    () => client("projects", { data: cleanObject(debouncedParam) }),
     [debouncedParam]
   );
 

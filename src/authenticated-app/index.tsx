@@ -4,14 +4,7 @@ import { useAuth } from "src/context/auth-context";
 import ProjectListScreen from "src/screens/project-list";
 import { ReactComponent as SoftwareLogo } from "src/assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import ProjectScreen from "src/screens/project";
 
 const AuthenticatedApp = () => {
