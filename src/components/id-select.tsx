@@ -1,18 +1,35 @@
 import { Select } from "antd";
-import React from "react";
+import React, { ComponentProps } from "react";
 
-interface IdSelectProps {
-  options: { label: string; id: number }[];
+interface Option {
+  label: string;
+  id: number;
+}
+type SelectProps = ComponentProps<typeof Select>;
+interface IdSelectProps
+  extends Omit<SelectProps, "options" | "onChange" | "defaultOption"> {
+  options: Option[];
   onChange?: (value?: number) => void;
+  defaultOption?: Option;
 }
 
+/**
+ * 在 Antd Select 的外层包一层
+ * 用于处理
+ *  1. 服务器 id 为 number 但从事件中拿到的是 string 的问题
+ *  2. 处理默认值 / undefined 问题
+ * @param props
+ * @returns
+ */
 function IdSelect(props: IdSelectProps) {
   return (
     <Select
       onChange={(value) => props.onChange?.(toNumber(value))}
-      defaultValue=""
+      defaultValue={props.defaultOption?.id}
     >
-      <Select.Option value="">负责人</Select.Option>
+      <Select.Option value={props.defaultOption?.id}>
+        {props.defaultOption?.label}
+      </Select.Option>
       {props.options.map((option) => (
         <Select.Option key={option.id} value={option.id}>
           {option.label}
