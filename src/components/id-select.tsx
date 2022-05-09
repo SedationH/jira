@@ -21,16 +21,22 @@ interface IdSelectProps
  * @param props
  * @returns
  */
-function IdSelect(props: IdSelectProps) {
+function IdSelect({
+  options,
+  onChange,
+  defaultOption,
+  ...restProps
+}: IdSelectProps) {
   return (
     <Select
-      onChange={(value) => props.onChange?.(toNumber(value))}
-      defaultValue={props.defaultOption?.id}
+      onChange={(value) => onChange?.(toNumber(value))}
+      defaultValue={defaultOption?.id}
+      {...restProps}
     >
-      <Select.Option value={props.defaultOption?.id}>
-        {props.defaultOption?.label}
+      <Select.Option value={defaultOption?.id}>
+        {defaultOption?.label}
       </Select.Option>
-      {props.options.map((option) => (
+      {options.map((option) => (
         <Select.Option key={option.id} value={option.id}>
           {option.label}
         </Select.Option>
