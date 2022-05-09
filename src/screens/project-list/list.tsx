@@ -2,26 +2,49 @@ import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import React from "react";
 import { Link } from "react-router-dom";
+import Pin from "src/components/pin";
+import { useRequest } from "src/utils/request";
 import { User } from "./search-panel";
 
-interface Project {
+export interface Project {
   id: number;
   name: string;
   personId: number;
   organization: string;
   created: number;
+  pin: boolean;
 }
 
 interface ListProps extends TableProps<Project> {
   users: User[];
+  retry: () => void;
 }
 
-function List({ users, ...props }: ListProps) {
+function List({ users, retry, ...props }: ListProps) {
+  const client = useRequest();
+  const mutate = (params: Partial<Project>) =>
+    client(`projects/${params.id}`, {
+      method: "PATCH",
+      data: params,
+    }).then(retry);
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+
   return (
     <Table
       pagination={false}
       rowKey="id"
       columns={[
+        {
+          title: <Pin checked={true} disabled={true} />,
+          render(_, project) {
+            return (
+              <Pin
+                checked={project.pin}
+                onCheckedChange={pinProject(project.id)}
+              />
+            );
+          },
+        },
         {
           title: "名称",
           sorter: (a, b) => a.name.localeCompare(b.name),

@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
-import SearchPanel from "./search-panel";
+import SearchPanel, { User } from "./search-panel";
 import { cleanObject, useDebounce, useTitle } from "src/utils";
 import { useRequest } from "src/utils/request";
-import List from "./list";
+import List, { Project } from "./list";
 import styled from "@emotion/styled";
 import { Button, Typography } from "antd";
 import { useAsyncRetry } from "react-use";
@@ -20,7 +20,7 @@ function ProjectListScreen() {
     loading: listLoading,
     error: listError,
     retry: listRetry,
-  } = useAsyncRetry(
+  } = useAsyncRetry<Project[]>(
     () => client("projects", { data: cleanObject(debouncedParam) }),
     [debouncedParam]
   );
@@ -30,12 +30,11 @@ function ProjectListScreen() {
     loading: userLoading,
     error: usersError,
     retry: usersRetry,
-  } = useAsyncRetry(() => client("users"));
+  } = useAsyncRetry<User[]>(() => client("users"));
 
   return (
     <ScreenContainer>
       <SearchPanel
-        // TODO：any 去掉 需要从 client 上改
         param={param as any}
         setParam={setParam}
         users={users || []}
@@ -63,6 +62,7 @@ function ProjectListScreen() {
         loading={listLoading || userLoading}
         dataSource={listError || usersError ? [] : list}
         users={users || []}
+        retry={listRetry}
       />
     </ScreenContainer>
   );
