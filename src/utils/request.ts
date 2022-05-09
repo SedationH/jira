@@ -1,4 +1,5 @@
 import { stringify } from "qs";
+import { useCallback } from "react";
 import * as auth from "src/auth-provider";
 import { useAuth } from "src/context/auth-context";
 
@@ -44,7 +45,9 @@ export const request = async (
 
 export const useRequest = () => {
   const { user } = useAuth();
-  // TS 操作符
-  return (...[endpoint, config]: Parameters<typeof request>) =>
-    request(endpoint, { ...config, token: user?.token });
+  return useCallback(
+    (...[endpoint, config]: Parameters<typeof request>) =>
+      request(endpoint, { ...config, token: user?.token }),
+    [user?.token]
+  );
 };
