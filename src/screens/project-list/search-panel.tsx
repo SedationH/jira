@@ -2,6 +2,7 @@ import { Button, Input, Select } from "antd";
 import IdSelect from "src/components/id-select";
 import { Row } from "src/components/lib";
 import { Optional } from "src/types";
+import { useProjectModal } from "./utils";
 
 export interface User {
   id: number;
@@ -19,11 +20,13 @@ interface SearchPanelProps {
 }
 
 function SearchPanel({ param, setParam, users }: SearchPanelProps) {
+  const { openProjectModal } = useProjectModal();
+
   return (
     <>
       <Row style={{ justifyContent: "space-between" }}>
         <h1>项目列表</h1>
-        <Button>创建项目</Button>
+        <Button onClick={openProjectModal}>创建项目</Button>
       </Row>
 
       <Row marginBottom gap>

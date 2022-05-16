@@ -6,17 +6,20 @@ import { ReactComponent as SoftwareLogo } from "src/assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import ProjectScreen from "src/screens/project";
+import { ProjectModal } from "src/components/project-modal";
 
 const AuthenticatedApp = () => {
   return (
     <Container>
-      <PageHeader />
       <BrowserRouter>
+        <PageHeader />
         <Routes>
           <Route index element={<Navigate replace to="/projects" />} />
           <Route path="/projects" element={<ProjectListScreen />} />
           <Route path="/projects/:projectId/*" element={<ProjectScreen />} />
         </Routes>
+
+        <ProjectModal />
       </BrowserRouter>
     </Container>
   );
