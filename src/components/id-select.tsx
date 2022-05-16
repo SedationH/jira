@@ -3,7 +3,7 @@ import React, { ComponentProps } from "react";
 
 interface Option {
   label: string;
-  id: number;
+  id?: number;
 }
 type SelectProps = ComponentProps<typeof Select>;
 interface IdSelectProps
@@ -31,6 +31,7 @@ function IdSelect({
     <Select
       onChange={(value) => onChange?.(toNumber(value))}
       defaultValue={defaultOption?.id}
+      placeholder={defaultOption?.label}
       {...restProps}
     >
       <Select.Option value={defaultOption?.id}>

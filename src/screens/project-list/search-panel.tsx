@@ -1,4 +1,4 @@
-import { Input, Select } from "antd";
+import { Button, Input, Select } from "antd";
 import IdSelect from "src/components/id-select";
 import { Row } from "src/components/lib";
 import { Optional } from "src/types";
@@ -21,7 +21,10 @@ interface SearchPanelProps {
 function SearchPanel({ param, setParam, users }: SearchPanelProps) {
   return (
     <>
-      <h1>项目列表</h1>
+      <Row style={{ justifyContent: "space-between" }}>
+        <h1>项目列表</h1>
+        <Button>创建项目</Button>
+      </Row>
 
       <Row marginBottom gap>
         <Input
@@ -36,6 +39,8 @@ function SearchPanel({ param, setParam, users }: SearchPanelProps) {
           }
         />
         <IdSelect
+          style={{ width: "10rem" }}
+          defaultOption={{ label: "负责人" }}
           options={users.map(({ name, id }) => ({ label: name, id }))}
           onChange={(personId) =>
             setParam({

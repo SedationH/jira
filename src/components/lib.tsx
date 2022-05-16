@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Spin } from "antd";
+import { Button, Spin } from "antd";
 
 // 垂直居中，按行排布子元素
 export const Row = styled.div<{
@@ -40,3 +40,7 @@ export const FullPageLoading = () => (
     <Spin size={"large"} />
   </FullPage>
 );
+
+export const ButtonNoPadding = styled(Button)`
+  padding: 0;
+`;
