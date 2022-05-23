@@ -1,8 +1,8 @@
 import { Button, Input, Select } from "antd";
 import IdSelect from "src/components/id-select";
 import { Row } from "src/components/lib";
+import { useProjectModal } from "src/components/project-modal/utils";
 import { Optional } from "src/types";
-import { useProjectModal } from "./utils";
 
 export interface User {
   id: number;

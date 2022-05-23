@@ -1,17 +1,21 @@
-import { useUrlQueryParam } from "src/utils/url";
+import { useAsyncRetry } from "react-use";
+import { useRequest } from "src/utils/request";
+import { User } from "./search-panel";
 
-export const useProjectModal = () => {
-  const [{ projectCreate }, setProjectCreate] = useUrlQueryParam([
-    "projectCreate", //projectCreate:url中的参数
-  ]);
+export const useUsers = () => {
+  const client = useRequest();
 
-  const openProjectModal = () => setProjectCreate({ projectCreate: true }); //设置参数的值
-  const closeProjectModal = () =>
-    setProjectCreate({ projectCreate: undefined }); //设置参数的值
+  const {
+    value: users,
+    loading: userLoading,
+    error: usersError,
+    retry: usersRetry,
+  } = useAsyncRetry<User[]>(() => client("users"));
 
   return {
-    projectModalOpen: projectCreate === "true",
-    openProjectModal,
-    closeProjectModal,
+    users: users ? users : [],
+    userLoading,
+    usersError,
+    usersRetry,
   };
 };

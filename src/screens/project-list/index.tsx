@@ -8,6 +8,7 @@ import { Button, Typography } from "antd";
 import { useAsyncRetry } from "react-use";
 import { Row } from "src/components/lib";
 import { useUrlQueryParam } from "src/utils/url";
+import { useUsers } from "./utils";
 
 function ProjectListScreen() {
   const client = useRequest();
@@ -25,12 +26,7 @@ function ProjectListScreen() {
     [debouncedParam]
   );
 
-  const {
-    value: users,
-    loading: userLoading,
-    error: usersError,
-    retry: usersRetry,
-  } = useAsyncRetry<User[]>(() => client("users"));
+  const { users, userLoading, usersError, usersRetry } = useUsers();
 
   return (
     <ScreenContainer>

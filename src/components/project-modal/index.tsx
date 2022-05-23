@@ -1,7 +1,11 @@
-import React, { useEffect } from "react";
 import { Button, Drawer, Form, Input, Spin } from "antd";
 import styled from "@emotion/styled";
-import { useProjectModal } from "../screens/project-list/utils";
+import { useProjectModal } from "./utils";
+import { useUsers } from "src/screens/project-list/utils";
+import IdSelect from "../id-select";
+import { useAsyncFn } from "react-use";
+import { useRequest } from "src/utils/request";
+import { Project } from "src/screens/project-list/list";
 
 export const ProjectModal = () => {
   const { projectModalOpen, closeProjectModal } = useProjectModal();
@@ -9,19 +13,37 @@ export const ProjectModal = () => {
     closeProjectModal();
   };
 
-  const isLoading = false;
+  const { users, userLoading, usersError, usersRetry } = useUsers();
+  const client = useRequest();
+
+  const [_, doAddProject] = useAsyncFn((params: Partial<Project>) =>
+    client(`projects`, {
+      data: params,
+      method: "POST",
+    })
+  );
 
   const title = false ? "编辑项目" : "创建项目";
+
+  const onFinish = (values: any) => {
+    doAddProject(values).finally(() => {
+      closeProjectModal();
+    });
+  };
 
   return (
     <Drawer onClose={closeModal} visible={projectModalOpen} width={"100%"}>
       <Container>
-        {isLoading ? (
+        {userLoading ? (
           <Spin size={"large"} />
         ) : (
           <>
             <h1>{title}</h1>
-            <Form layout={"vertical"} style={{ width: "40rem" }}>
+            <Form
+              onFinish={onFinish}
+              layout={"vertical"}
+              style={{ width: "40rem" }}
+            >
               <Form.Item
                 label={"名称"}
                 name={"name"}
@@ -38,8 +60,15 @@ export const ProjectModal = () => {
                 <Input placeholder={"请输入部门名"} />
               </Form.Item>
 
+              <Form.Item label={"负责人"} name={"personId"}>
+                <IdSelect
+                  defaultOption={{ label: "负责人" }}
+                  options={users.map(({ name, id }) => ({ label: name, id }))}
+                />
+              </Form.Item>
+
               <Form.Item style={{ textAlign: "right" }}>
-                <Button type={"primary"} htmlType={"submit"}>
+                <Button type={"primary"} htmlType="submit">
                   提交
                 </Button>
               </Form.Item>
