@@ -6,9 +6,16 @@ import IdSelect from "../id-select";
 import { useAsyncFn } from "react-use";
 import { useRequest } from "src/utils/request";
 import { Project } from "src/screens/project-list/list";
+import { useTitle } from "src/utils";
 
 export const ProjectModal = () => {
-  const { projectModalOpen, closeProjectModal } = useProjectModal();
+  const {
+    projectModalOpen,
+    closeProjectModal,
+    editingProject,
+    editingProjectId,
+  } = useProjectModal();
+
   const closeModal = () => {
     closeProjectModal();
   };
@@ -23,7 +30,9 @@ export const ProjectModal = () => {
     })
   );
 
-  const title = false ? "编辑项目" : "创建项目";
+  const title = editingProjectId !== undefined ? "编辑项目" : "创建项目";
+
+  useTitle(title, false);
 
   const onFinish = (values: any) => {
     doAddProject(values).finally(() => {

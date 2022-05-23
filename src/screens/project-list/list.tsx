@@ -1,8 +1,9 @@
-import { Table, TableProps } from "antd";
+import { Button, Dropdown, Menu, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import React from "react";
 import { Link } from "react-router-dom";
 import Pin from "src/components/pin";
+import { useProjectModal } from "src/components/project-modal/utils";
 import { useRequest } from "src/utils/request";
 import { User } from "./search-panel";
 
@@ -27,7 +28,9 @@ function List({ users, retry, ...props }: ListProps) {
       method: "PATCH",
       data: params,
     }).then(retry);
+
   const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+  const { startEdit } = useProjectModal();
 
   return (
     <Table
@@ -75,6 +78,25 @@ function List({ users, retry, ...props }: ListProps) {
                   ? dayjs(project.created).format("YYYY-MM-DD")
                   : "无"}
               </span>
+            );
+          },
+        },
+        {
+          title: "Action",
+          render(_, project) {
+            return (
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item onClick={() => startEdit(project.id)} key="edit">
+                      编辑
+                    </Menu.Item>
+                    <Menu.Item key="delete">删除</Menu.Item>
+                  </Menu>
+                }
+              >
+                <Button type={"link"}>...</Button>
+              </Dropdown>
             );
           },
         },

@@ -1,4 +1,4 @@
-import { useAsyncRetry } from "react-use";
+import { useAsync, useAsyncFn, useAsyncRetry } from "react-use";
 import { useRequest } from "src/utils/request";
 import { User } from "./search-panel";
 
@@ -18,4 +18,9 @@ export const useUsers = () => {
     usersError,
     usersRetry,
   };
+};
+
+export const useProject = (id?: number) => {
+  const client = useRequest();
+  return useAsync(() => client(`projects/${id}`));
 };
