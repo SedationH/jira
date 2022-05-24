@@ -1,4 +1,4 @@
-import { useProject } from "src/screens/project-list/utils";
+import { useProject } from "src/service/project";
 import { useSetUrlSearchParam, useUrlQueryParam } from "src/utils/url";
 
 export const useProjectModal = () => {

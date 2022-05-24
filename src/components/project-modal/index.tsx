@@ -1,7 +1,6 @@
 import { Button, Drawer, Form, Input, Spin } from "antd";
 import styled from "@emotion/styled";
 import { useProjectModal } from "./utils";
-import { useUsers } from "src/screens/project-list/utils";
 import IdSelect from "../id-select";
 import { useAsyncFn } from "react-use";
 import { useRequest } from "src/utils/request";
@@ -9,6 +8,7 @@ import { Project } from "src/screens/project-list/list";
 import { useTitle } from "src/utils";
 import { useForm } from "antd/lib/form/Form";
 import { useEffect } from "react";
+import { useAddProject, useEditProject, useUsers } from "src/service/project";
 
 export const ProjectModal = () => {
   const {
@@ -33,26 +33,15 @@ export const ProjectModal = () => {
   const { users, userLoading } = useUsers();
   const client = useRequest();
 
-  const [, doAddProject] = useAsyncFn((params: Partial<Project>) =>
-    client(`projects`, {
-      data: params,
-      method: "POST",
-    })
-  );
+  const addProject = useAddProject();
 
-  const [, doModifyProject] = useAsyncFn((params: Partial<Project>) => {
-    console.log(params);
-    return client(`projects/${params.id}`, {
-      data: params,
-      method: "PATCH",
-    });
-  });
+  const editProject = useEditProject();
 
   const isEditing = editingProjectId !== undefined;
 
   const title = isEditing ? "编辑项目" : "创建项目";
 
-  const mutateProject = isEditing ? doModifyProject : doAddProject;
+  const mutateProject = isEditing ? editProject : addProject;
 
   const onFinish = (values: any) => {
     mutateProject({

@@ -80,5 +80,5 @@ export const subset = <
   const filteredEntries = Object.entries(obj).filter(([key]) =>
     keys.includes(key as K)
   );
-  return Object.fromEntries(filteredEntries) as Pick<O, K>;
+  return Object.fromEntries(filteredEntries) as Partial<Pick<O, K>>;
 };

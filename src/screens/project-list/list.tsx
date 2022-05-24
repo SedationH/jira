@@ -1,9 +1,10 @@
-import { Button, Dropdown, Menu, Table, TableProps } from "antd";
+import { Button, Dropdown, Menu, Modal, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import React from "react";
 import { Link } from "react-router-dom";
 import Pin from "src/components/pin";
 import { useProjectModal } from "src/components/project-modal/utils";
+import { useDeleteProject, useEditProject } from "src/service/project";
 import { useRequest } from "src/utils/request";
 import { User } from "./search-panel";
 
@@ -18,18 +19,28 @@ export interface Project {
 
 interface ListProps extends TableProps<Project> {
   users: User[];
+  // TODO 想办法让 retry 不需要向下传
   retry: () => void;
 }
 
 function List({ users, retry, ...props }: ListProps) {
-  const client = useRequest();
-  const mutate = (params: Partial<Project>) =>
-    client(`projects/${params.id}`, {
-      method: "PATCH",
-      data: params,
-    }).then(retry);
+  const editProject = useEditProject();
+  // 函数 curry
+  const pinProject = (id: number) => (pin: boolean) =>
+    editProject({ id, pin }).then(retry);
 
-  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+  const deleteProject = useDeleteProject();
+  const confirmDeleteProject = (id: number) => {
+    Modal.confirm({
+      title: "确定删除这个项目吗?",
+      content: "点击确定删除",
+      okText: "确定",
+      onOk() {
+        deleteProject(id).then(retry);
+      },
+    });
+  };
+
   const { startEdit } = useProjectModal();
 
   return (
@@ -91,7 +102,12 @@ function List({ users, retry, ...props }: ListProps) {
                     <Menu.Item onClick={() => startEdit(project.id)} key="edit">
                       编辑
                     </Menu.Item>
-                    <Menu.Item key="delete">删除</Menu.Item>
+                    <Menu.Item
+                      onClick={() => confirmDeleteProject(project.id)}
+                      key="delete"
+                    >
+                      删除
+                    </Menu.Item>
                   </Menu>
                 }
               >
