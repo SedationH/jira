@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import { Project } from "src/screens/project-list/list";
 import { useProject } from "src/screens/project-list/utils";
-import { useUrlQueryParam } from "src/utils/url";
+import { useSetUrlSearchParam, useUrlQueryParam } from "src/utils/url";
 
 export const useProjectModal = () => {
   const [{ projectCreate }, setProjectCreate] = useUrlQueryParam([
@@ -16,13 +14,16 @@ export const useProjectModal = () => {
     setEditingProjectId({ editingProjectId: id });
 
   const openProjectModal = () => setProjectCreate({ projectCreate: true }); //设置参数的值
+
+  const setUrlParams = useSetUrlSearchParam();
   const closeProjectModal = () => {
-    // 不能分两次设置，合并会有问题
-    setProjectCreate({ projectCreate: undefined });
-    setEditingProjectId({ editingProjectId: undefined });
+    setUrlParams({
+      projectCreate: undefined,
+      editingProjectId: undefined,
+    });
   };
 
-  const { value: editingProject, loading } = useProject(
+  const { value: editingProject, loading: projectLoading } = useProject(
     Number(editingProjectId)
   );
 
@@ -34,6 +35,6 @@ export const useProjectModal = () => {
     startEdit,
     editingProjectId,
     editingProject,
-    loading,
+    projectLoading,
   };
 };

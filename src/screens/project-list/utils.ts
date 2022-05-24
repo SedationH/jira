@@ -1,3 +1,4 @@
+import { useQuery } from "react-query";
 import { useAsync, useAsyncFn, useAsyncRetry } from "react-use";
 import { useRequest } from "src/utils/request";
 import { User } from "./search-panel";
@@ -22,5 +23,5 @@ export const useUsers = () => {
 
 export const useProject = (id?: number) => {
   const client = useRequest();
-  return useAsync(() => client(`projects/${id}`));
+  return useAsync(() => client(`projects/${id}`), [id]);
 };

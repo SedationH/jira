@@ -7,6 +7,8 @@ import { useAsyncFn } from "react-use";
 import { useRequest } from "src/utils/request";
 import { Project } from "src/screens/project-list/list";
 import { useTitle } from "src/utils";
+import { useForm } from "antd/lib/form/Form";
+import { useEffect } from "react";
 
 export const ProjectModal = () => {
   const {
@@ -14,41 +16,69 @@ export const ProjectModal = () => {
     closeProjectModal,
     editingProject,
     editingProjectId,
+    projectLoading,
   } = useProjectModal();
 
+  const [form] = useForm();
+
   const closeModal = () => {
+    form.resetFields();
     closeProjectModal();
   };
 
-  const { users, userLoading, usersError, usersRetry } = useUsers();
+  useEffect(() => {
+    form.setFieldsValue(editingProject); //设置输入框的值
+  }, [editingProject, form]);
+
+  const { users, userLoading } = useUsers();
   const client = useRequest();
 
-  const [_, doAddProject] = useAsyncFn((params: Partial<Project>) =>
+  const [, doAddProject] = useAsyncFn((params: Partial<Project>) =>
     client(`projects`, {
       data: params,
       method: "POST",
     })
   );
 
-  const title = editingProjectId !== undefined ? "编辑项目" : "创建项目";
+  const [, doModifyProject] = useAsyncFn((params: Partial<Project>) => {
+    console.log(params);
+    return client(`projects/${params.id}`, {
+      data: params,
+      method: "PATCH",
+    });
+  });
 
-  useTitle(title, false);
+  const isEditing = editingProjectId !== undefined;
+
+  const title = isEditing ? "编辑项目" : "创建项目";
+
+  const mutateProject = isEditing ? doModifyProject : doAddProject;
 
   const onFinish = (values: any) => {
-    doAddProject(values).finally(() => {
+    mutateProject({
+      ...values,
+      id: editingProjectId,
+    }).finally(() => {
       closeProjectModal();
     });
   };
 
+  useTitle(title, false);
   return (
-    <Drawer onClose={closeModal} visible={projectModalOpen} width={"100%"}>
+    <Drawer
+      forceRender
+      onClose={closeModal}
+      visible={projectModalOpen}
+      width={"100%"}
+    >
       <Container>
-        {userLoading ? (
+        {userLoading || projectLoading ? (
           <Spin size={"large"} />
         ) : (
           <>
             <h1>{title}</h1>
             <Form
+              form={form}
               onFinish={onFinish}
               layout={"vertical"}
               style={{ width: "40rem" }}
